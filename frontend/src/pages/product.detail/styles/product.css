@@ -1,0 +1,246 @@
+/* styles/product.css */
+/* Same as offer.css but with product-specific modifications */
+/* Add these styles to your existing offer.css or create new file */
+
+/* Stock Section */
+.stock-section-wrapper {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-lg);
+}
+
+.stock-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.stock-info, .sold-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.stock-icon, .sold-icon {
+  font-size: 20px;
+  color: var(--primary);
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stock-details, .sold-details {
+  flex: 1;
+}
+
+.stock-label, .sold-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.stock-value, .sold-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+}
+
+.stock-value.low-stock {
+  color: var(--danger);
+}
+
+.stock-warning {
+  font-size: 12px;
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* Stock Badge on Image */
+.stock-badge {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stock-badge.in-stock {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.stock-badge.out-of-stock {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+}
+
+/* Discount Badge on Image */
+.discount-image-badge {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: linear-gradient(135deg, var(--danger), #C51162);
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Unit Display in Price */
+.unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* Product Specs */
+.product-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.spec-item {
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.spec-icon {
+  font-size: 18px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.spec-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.spec-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Storage Tips */
+.storage-tips, .usage-ideas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.tip-item, .idea-item {
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.tip-icon, .idea-icon {
+  font-size: 20px;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tip-content, .idea-content {
+  flex: 1;
+}
+
+.tip-content h4, .idea-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.tip-content p, .idea-content p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Three Tabs Layout */
+.tabs-header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .product-specs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Toast Notification */
+.product-toast {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: var(--shadow-lg);
+  background: rgba(16, 185, 129, 0.95);
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  animation: toastSlideIn 0.3s ease-out, toastFadeOut 0.2s ease 1.7s forwards;
+  white-space: nowrap;
+  max-width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.product-toast.error {
+  background: rgba(239, 68, 68, 0.95);
+}
+
+.product-toast.info {
+  background: rgba(59, 130, 246, 0.95);
+}
+
+/* Loading & Error states use same styles as offer.css */
