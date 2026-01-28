@@ -7,7 +7,8 @@ import productRoutes from './src/routes/product.routes.js';
 import offerRoutes from './src/routes/offer.routes.js';
 import userRoutes from './src/routes/user.routes.js';
 import cartRoutes from './src/routes/cart.routes.js';
-import otpRoutes from './routes/otp.routes.js';
+import otpRoutes from './src/routes/otp.routes.js';
+import authRoutes from './src/routes/auth.routes.js';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use('/api/offers', offerRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/otp', otpRoutes);
+app.use('/api/auth', authRoutes);
 
 
 /* =======================
