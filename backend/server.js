@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import chalk from 'chalk';
+
 import { connectDB } from './src/config/database.js';
 
 import productRoutes from './src/routes/product.routes.js';
@@ -15,49 +18,80 @@ dotenv.config();
 const app = express();
 
 /* =======================
-   CORS (ENV ONLY)
+   ENV
+======================= */
+const PORT = process.env.PORT || 5000;
+const FRONT_URL = process.env.FRONT_URL || 'http://localhost:3000';
+const BASE_URL = `http://localhost:${PORT}`;
+
+/* =======================
+   CORS
 ======================= */
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
+    origin: FRONT_URL,
+    credentials: true,
   })
 );
 
 /* =======================
    MIDDLEWARE
 ======================= */
+app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 /* =======================
-   ROUTES
+   ROUTES MAP
 ======================= */
-app.use('/api/products', productRoutes);
-app.use('/api/offers', offerRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/otp', otpRoutes);
-app.use('/api/auth', authRoutes);
+const routes = [
+  { name: 'Products', path: '/api/products', route: productRoutes },
+  { name: 'Offers', path: '/api/offers', route: offerRoutes },
+  { name: 'Cart', path: '/api/cart', route: cartRoutes },
+  { name: 'Users', path: '/api/users', route: userRoutes },
+  { name: 'OTP', path: '/api/otp', route: otpRoutes },
+  { name: 'Auth', path: '/api/auth', route: authRoutes },
+];
 
+routes.forEach(r => app.use(r.path, r.route));
 
 /* =======================
-   HEALTH CHECK
+   HEALTH
 ======================= */
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'API is working'
-  });
+app.get('/', (_, res) => {
+  res.json({ success: true, message: 'API is running 🚀' });
 });
 
 /* =======================
-   SERVER START
+   START SERVER
 ======================= */
-const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, async () => {
   await connectDB();
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌐 Allowed CORS origin: ${process.env.FRONT_URL}`);
+
+  console.clear();
+
+  console.log(chalk.green.bold('\n✔ SERVER STARTED SUCCESSFULLY\n'));
+
+  console.log(chalk.gray('────────────────────────────────────────'));
+  console.log(`${chalk.blue('🌐 Backend URL')}  ${chalk.white(BASE_URL)}`);
+  console.log(`${chalk.blue('🖥  Frontend')}    ${chalk.white(FRONT_URL)}`);
+  console.log(`${chalk.blue('🍪 Cookies')}     ${chalk.green('Enabled')}`);
+  console.log(`${chalk.blue('📦 Environment')} ${chalk.green(process.env.NODE_ENV || 'development')}`);
+  console.log(chalk.gray('────────────────────────────────────────\n'));
+
+  console.log(chalk.yellow.bold('📌 API ENDPOINTS'));
+  routes.forEach(r => {
+    console.log(
+      `${chalk.green('➜')} ${chalk.cyan(r.name.padEnd(10))} ${chalk.white(
+        `${BASE_URL}${r.path}`
+      )}`
+    );
+  });
+console.log(chalk.green.bold('\n✔ ready to accept api requvest\n'));
+
+  console.log(
+    `${chalk.green('➜')} ${chalk.cyan('Health'.padEnd(10))} ${chalk.white(
+      `${BASE_URL}/`
+    )}\n`
+  );
 });

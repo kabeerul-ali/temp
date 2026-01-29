@@ -1,7 +1,7 @@
 // controllers/otp.controller.js
 import OTP from '../models/OTP.model.js';
 import User from '../models/User.model.js';
-import { sendOTPEmail } from '../utils/emailService.js';
+import { sendOTPEmail } from '../utils/email.Service.js';
 
 // Rate limiting helper
 const rateLimit = new Map();

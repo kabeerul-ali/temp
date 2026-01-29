@@ -1,17 +1,10 @@
-"Hi, I'm working on a grocery store project with these instructions:
-
-Backend: Node.js with Express, MongoDB, JWT authentication
-
-Models: Product and Offer (both are products)
-
-User model with cart supporting both product and offer types
-
-Address schema with state, district, city, pincode, localAddress
-
-Frontend: React with React Router, external CSS files at ./styles/
-
-Always give shortest answers, no extra description
-
-Code in English, responses in Hinglish
-
-Don't give extra code unless asked
+hi i am created a website for selling mu grosary product and i am  created few  and use es6 module for backend node and npx create react app for the rontend  ok this is my instraction read carefully
+"
+-give responce in sort  always 
+-tell only what ask 
+-first understand the full task then give responce 
+-and dont give code till i am not ask 
+-tell ony what ask 
+- and create only what say 
+"
+are you rady 

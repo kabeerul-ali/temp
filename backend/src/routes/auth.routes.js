@@ -1,25 +1,30 @@
-// routes/auth.routes.js
 import express from 'express';
-import {
-  registerUser,
-  loginUser,
+import { 
+  login,
+  sendSignupOTP,
+  verifySignupOTP,    // Changed
+  completeSignup, 
+  sendForgotOTP,
+  verifyForgotOTP,
   resetPassword,
-  adminResetPassword,
-  logoutUser,
-  getCurrentUser,
-  isAuthenticated
+  logout
 } from '../controllers/auth.controller.js';
+import { getProfile } from '../controllers/user.controller.js';
+import { protect } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
 // Public routes
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.post('/reset-password', resetPassword);
-router.post('/admin/reset-password', adminResetPassword);
-router.post('/logout', logoutUser);
+router.post('/login', login);
+router.post('/signup/send-otp', sendSignupOTP);
+router.post('/signup/verify-otp', verifySignupOTP);   // Changed
+router.post('/signup/complete', completeSignup);      // New
+router.post('/forgot/send-otp', sendForgotOTP);
+router.post('/forgot/verify', verifyForgotOTP);
+router.get('/profile', protect, getProfile); // Add this line
 
 // Protected routes
-router.get('/me', isAuthenticated, getCurrentUser);
+router.post('/reset-password', protect, resetPassword);
+router.post('/logout', logout);
 
 export default router;
