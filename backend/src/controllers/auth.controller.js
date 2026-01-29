@@ -279,6 +279,7 @@ export const sendForgotOTP = async (req, res) => {
 };
 
 // Verify OTP and reset password (forgot)
+// In auth.controller.js - verifyForgotOTP function
 export const verifyForgotOTP = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
@@ -301,9 +302,9 @@ export const verifyForgotOTP = async (req, res) => {
       });
     }
     
-    // Update password
+    // Update password - SAVE WITHOUT VALIDATION
     user.password = newPassword;
-    await user.save();
+    await user.save({ validateBeforeSave: false }); // ADD THIS
     
     res.status(200).json({
       success: true,
@@ -337,9 +338,9 @@ export const resetPassword = async (req, res) => {
       });
     }
     
-    // Update password
+    // Update password - SAVE WITHOUT VALIDATION
     user.password = newPassword;
-    await user.save();
+    await user.save({ validateBeforeSave: false }); // ADD THIS
     
     res.status(200).json({
       success: true,

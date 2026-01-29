@@ -109,7 +109,7 @@ export default function Home() {
   const loadCartCount = async () => {
     try {
       if (user) {
-        const res = await axios.get(`${BACKEND_URL}/api/users/profile`, {
+        const res = await axios.get(`${BACKEND_URL}/api/auth/profile`, {
           withCredentials: true
         });
         const count = res.data.data?.cart?.reduce((sum, item) => sum + item.quantity, 0) || 0;

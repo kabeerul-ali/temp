@@ -329,7 +329,7 @@ export default function Login() {
             </label>
             
             <Link 
-              to="/forgot-password" 
+              to="/forgot" 
               className="forgot-link"
               aria-label="Forgot password"
             >

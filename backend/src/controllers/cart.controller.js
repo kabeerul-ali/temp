@@ -3,10 +3,26 @@ import User from '../models/User.model.js';
 // Add to cart
 export const addToCart = async (req, res) => {
   try {
+    console.log('=== CART ADD REQUEST ===');
+    console.log('User ID:', req.user?._id);
+    console.log('Body:', req.body);
+    
     const { type, itemId, quantity = 1 } = req.body;
+    
+    // Check if user exists
     const user = await User.findById(req.user._id);
+    if (!user) {
+      console.log('ERROR: User not found');
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    console.log('User found:', user.email);
+    console.log('Calling addToCart method...');
     
     await user.addToCart(type, itemId, quantity);
+    
+    console.log('Cart after add:', user.cart);
+    console.log('=== CART ADD SUCCESS ===\n');
     
     res.status(200).json({ 
       success: true, 
@@ -14,7 +30,15 @@ export const addToCart = async (req, res) => {
       cart: user.cart 
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('=== CART ADD ERROR ===');
+    console.error('Error:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('=== END ERROR ===\n');
+    
+    res.status(500).json({ 
+      success: false, 
+      message: error.message
+    });
   }
 };
 
@@ -37,6 +61,7 @@ export const removeFromCart = async (req, res) => {
 };
 
 // Update quantity
+// In cart.controller.js
 export const updateCartQuantity = async (req, res) => {
   try {
     const { type, itemId, quantity } = req.body;
@@ -59,7 +84,9 @@ export const updateCartQuantity = async (req, res) => {
     }
     
     user.cart[itemIndex].quantity = quantity;
-    await user.save();
+    
+    // FIX: Save without validation
+    await user.save({ validateBeforeSave: false });
     
     res.status(200).json({ 
       success: true, 

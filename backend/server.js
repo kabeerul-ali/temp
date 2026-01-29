@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import chalk from 'chalk';
-
+dotenv.config();
 import { connectDB } from './src/config/database.js';
 
 import productRoutes from './src/routes/product.routes.js';
@@ -13,7 +13,7 @@ import cartRoutes from './src/routes/cart.routes.js';
 import otpRoutes from './src/routes/otp.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
 
-dotenv.config();
+
 
 const app = express();
 

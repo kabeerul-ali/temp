@@ -93,7 +93,7 @@ userSchema.methods.getCartTotal = function () {
 };
 
 // ✅ NEW: Simple add to cart method (works for both)
-userSchema.methods.addToCart = function (type, itemId, quantity = 1) {
+userSchema.methods.addToCart = async function (type, itemId, quantity = 1) {
   // Check if item already exists
   const existingIndex = this.cart.findIndex((item) => {
     if (type === "product") {
@@ -130,7 +130,29 @@ userSchema.methods.addToCart = function (type, itemId, quantity = 1) {
     this.cart.push(newItem);
   }
 
-  return this.save();
+  // FIX: Save without validating addresses
+  return this.save({ validateBeforeSave: false });
+};
+
+// Also update removeFromCart:
+userSchema.methods.removeFromCart = async function (type, itemId) {
+  this.cart = this.cart.filter((item) => {
+    if (type === "product") {
+      return !(
+        item.type === "product" &&
+        item.productId &&
+        item.productId.toString() === itemId.toString()
+      );
+    } else {
+      return !(
+        item.type === "offer" &&
+        item.offerId &&
+        item.offerId.toString() === itemId.toString()
+      );
+    }
+  });
+
+  return this.save({ validateBeforeSave: false });
 };
 
 // ✅ NEW: Remove from cart

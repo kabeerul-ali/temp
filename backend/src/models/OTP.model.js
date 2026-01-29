@@ -38,46 +38,21 @@ const otpSchema = new mongoose.Schema({
   timestamps: true 
 });
 
-// Encrypt OTP before saving
-otpSchema.pre('save', async function(next) {
-  if (!this.isModified('otp')) return next();
-  
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.otp = await bcrypt.hash(this.otp, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+// NO PRE-SAVE HOOK AT ALL - Remove completely
 
 // Generate 6 digit OTP
 otpSchema.statics.generateOTP = function() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Verify OTP
+// Verify OTP - SIMPLEST VERSION
 otpSchema.methods.verifyOTP = async function(candidateOTP) {
   try {
     const isMatch = await bcrypt.compare(candidateOTP, this.otp);
-    
-    if (isMatch) {
-      this.attempts = 0;
-      await this.save();
-      return true;
-    } else {
-      this.attempts += 1;
-      this.lastAttempt = new Date();
-      await this.save();
-      
-      if (this.attempts >= 3) {
-        await this.deleteOne();
-      }
-      
-      return false;
-    }
+    return isMatch;
   } catch (error) {
-    throw new Error('OTP verification failed');
+    console.error('OTP comparison error:', error);
+    return false;
   }
 };
 

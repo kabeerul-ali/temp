@@ -1,0 +1,128 @@
+/* Reset Password Specific */
+.logo-circle.security {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+}
+
+.password-requirements {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.requirements-icon {
+  font-size: 20px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.requirements-list {
+  flex: 1;
+}
+
+.requirements-list p {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.requirements-list ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.requirements-list li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.requirements-list li.met {
+  color: var(--primary);
+}
+
+.requirements-list li i {
+  font-size: 12px;
+}
+
+.security-note {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.security-note .security-icon {
+  color: var(--warning);
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.security-text {
+  font-size: 14px;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+.back-to-profile {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.profile-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.profile-btn:hover {
+  background: var(--surface-alt);
+  border-color: var(--primary);
+}
+
+.profile-icon {
+  font-size: 18px;
+}
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+.loading-screen .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(16, 185, 129, 0.1);
+  border-top-color: var(--primary);
+}
+
+.loading-screen p {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
