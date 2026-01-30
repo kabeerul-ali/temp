@@ -133,3 +133,80 @@ export const addMultipleToCart = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+// Get cart items with populated data
+export const getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: 'cart.productId',
+        select: 'name description images price discountPrice category stock isAvailable unit'
+      })
+      .populate({
+        path: 'cart.offerId',
+        select: 'name description image price discount endTime'
+      })
+      .select('cart');
+    
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      });
+    }
+    
+    // Format cart items with populated data
+    const formattedCart = user.cart.map(item => {
+      const cartItem = {
+        _id: item._id,
+        type: item.type,
+        quantity: item.quantity,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
+      };
+      
+      if (item.type === 'product' && item.productId) {
+        cartItem.product = {
+          _id: item.productId._id,
+          name: item.productId.name,
+          description: item.productId.description,
+          images: item.productId.images,
+          price: item.productId.price,
+          discountPrice: item.productId.discountPrice,
+          category: item.productId.category,
+          stock: item.productId.stock,
+          isAvailable: item.productId.isAvailable,
+          unit: item.productId.unit
+        };
+        cartItem.productId = item.productId._id;
+      } else if (item.type === 'offer' && item.offerId) {
+        cartItem.offer = {
+          _id: item.offerId._id,
+          name: item.offerId.name,
+          description: item.offerId.description,
+          image: item.offerId.image,
+          price: item.offerId.price,
+          discount: item.offerId.discount,
+          endTime: item.offerId.endTime
+        };
+        cartItem.offerId = item.offerId._id;
+      }
+      
+      return cartItem;
+    });
+    
+    res.status(200).json({ 
+      success: true, 
+      message: 'Cart fetched successfully',
+      cart: formattedCart,
+      totalItems: user.getCartTotal()
+    });
+    
+  } catch (error) {
+    console.error('Get cart error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to get cart',
+      error: error.message 
+    });
+  }
+};

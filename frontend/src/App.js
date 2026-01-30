@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import Home from "./pages/home";
+import Home from "./pages/home.jsx";
+import Cart from "./pages/cart.jsx";
 
 import ProductPage from "./pages/product.detail/product.jsx";
 import OfferPage from "./pages/product.detail/offer.jsx";
@@ -16,6 +17,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="cart" element={<Cart />} />
+
           <Route path="product/:id" element={<ProductPage />} />
           <Route path="offer/:id" element={<OfferPage />} />
           <Route path="login" element={<Login />} />
