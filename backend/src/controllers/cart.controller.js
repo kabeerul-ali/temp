@@ -46,9 +46,29 @@ export const addToCart = async (req, res) => {
 export const removeFromCart = async (req, res) => {
   try {
     const { type, itemId } = req.body;
+    console.log('Remove from cart:', { type, itemId, userId: req.user._id });
+    
     const user = await User.findById(req.user._id);
     
-    await user.removeFromCart(type, itemId);
+    // Filter out the item
+    user.cart = user.cart.filter((item) => {
+      if (type === 'product') {
+        return !(
+          item.type === 'product' &&
+          item.productId &&
+          item.productId.toString() === itemId
+        );
+      } else {
+        return !(
+          item.type === 'offer' &&
+          item.offerId &&
+          item.offerId.toString() === itemId
+        );
+      }
+    });
+    
+    // Save without validating addresses
+    await user.save({ validateBeforeSave: false });
     
     res.status(200).json({ 
       success: true, 
@@ -56,10 +76,13 @@ export const removeFromCart = async (req, res) => {
       cart: user.cart 
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Remove from cart error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
-
 // Update quantity
 // In cart.controller.js
 export const updateCartQuantity = async (req, res) => {
@@ -99,18 +122,27 @@ export const updateCartQuantity = async (req, res) => {
 };
 
 // Clear cart
+// cart.controller.js
 export const clearCart = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+    
+    // Clear cart array
     user.cart = [];
-    await user.save();
+    
+    // Save without validating addresses
+    await user.save({ validateBeforeSave: false });
     
     res.status(200).json({ 
       success: true, 
-      message: 'Cart cleared' 
+      message: 'Cart cleared successfully' 
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Clear cart error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
 
