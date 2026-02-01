@@ -69,6 +69,11 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false,
     },
+    wallet: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     image: String,
     addresses: [addressSchema],
     cart: [cartSchema], // Still same field name
@@ -173,6 +178,16 @@ userSchema.methods.removeFromCart = function (type, itemId) {
     }
   });
 
+  return this.save();
+};
+userSchema.methods.updateWallet = async function (amount, description = "", reference = "") {
+  const newBalance = this.wallet + amount;
+  
+  if (newBalance < 0) {
+    throw new Error("Insufficient wallet balance");
+  }
+  
+  this.wallet = newBalance;
   return this.save();
 };
 

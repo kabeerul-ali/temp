@@ -1,153 +1,65 @@
-// src/models/Order.model.js
 import mongoose from 'mongoose';
-import { 
-  ORDER_STATUS, 
-  PAYMENT_STATUS, 
-  PAYMENT_METHOD 
-} from '../config/constants.js';
 
 const orderItemSchema = new mongoose.Schema({
-  product: {
+  type: {
+    type: String,
+    enum: ['product', 'offer'],
+    required: true
+  },
+  productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
+    ref: 'Product'
   },
-  name: {
-    type: String,
-    required: true
+  offerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Offer'
   },
-  price: {
-    type: Number,
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1
-  },
-  image: {
-    type: String,
-    required: true
-  }
+  name: String,
+  quantity: Number,
+  price: Number,
+  image: String
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
-    index: true
-  },
-  orderNumber: {
-    type: String,
-    unique: true,
     required: true
   },
+  address: {
+    localAddress: String,
+    city: String,
+    district: String,
+    state: String,
+    pincode: String,
+    country: { type: String, default: 'India' }
+  },
   items: [orderItemSchema],
-  
-  // Delivery details
-  deliveryAddress: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  phone: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  
-  // Pricing
-  subtotal: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  deliveryCharge: {
-    type: Number,
-    required: true,
-    min: 0,
-    default: 0
-  },
   totalAmount: {
     type: Number,
     required: true,
     min: 0
   },
-  
-  // Payment
   paymentMethod: {
     type: String,
-    required: true,
-    enum: Object.values(PAYMENT_METHOD)
+    enum: ['COD', 'Online', 'Wallet'],
+    default: 'COD'
   },
   paymentStatus: {
     type: String,
-    required: true,
-    enum: Object.values(PAYMENT_STATUS),
-    default: PAYMENT_STATUS.PENDING
+    enum: ['Pending', 'Done', 'Failed'],
+    default: 'Pending'
   },
-  razorpayOrderId: String,
-  razorpayPaymentId: String,
-  razorpaySignature: String,
-  
-  // Order status
-  status: {
+  orderStatus: {
     type: String,
-    required: true,
-    enum: Object.values(ORDER_STATUS),
-    default: ORDER_STATUS.PROCESSING,
-    index: true
+    enum: ['Processing', 'Shipping', 'Cancelled', 'Delivered'],
+    default: 'Processing'
   },
-  
-  // Timestamps
+  transactionId: String,
+  notes: String,
   cancelledAt: Date,
-  confirmedAt: Date,
-  shippedAt: Date,
-  deliveredAt: Date,
-  
-  // Additional info
-  cancelReason: String,
-  adminNote: String
-}, { 
-  timestamps: true 
-});
-
-// Generate unique order number
-orderSchema.pre('validate', function(next) {
-  if (!this.orderNumber) {
-    const date = new Date();
-    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
-    const random = Math.floor(1000 + Math.random() * 9000);
-    this.orderNumber = `ORD-${dateStr}-${random}`;
-  }
-  next();
-});
-
-// Indexes for better query performance
-orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ status: 1, createdAt: -1 });
-orderSchema.index({ orderNumber: 1 });
-
-// Check if order can be cancelled
-orderSchema.methods.canBeCancelled = function() {
-  if (this.status === ORDER_STATUS.CANCELLED || 
-      this.status === ORDER_STATUS.DELIVERED) {
-    return false;
-  }
-  
-  // Check 10 minute window
-  const now = new Date();
-  const orderTime = this.createdAt;
-  const diffMinutes = (now - orderTime) / (1000 * 60);
-  
-  return diffMinutes <= 10;
-};
-
-// Get total items count
-orderSchema.methods.getTotalItems = function() {
-  return this.items.reduce((total, item) => total + item.quantity, 0);
-};
+  deliveredAt: Date
+}, { timestamps: true });
 
 const Order = mongoose.model('Order', orderSchema);
 export default Order;
