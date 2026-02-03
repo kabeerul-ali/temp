@@ -10,7 +10,10 @@ import Signup from "./pages/login/signup.jsx";
 import Forgot from "./pages/login/forgot.jsx";
 import Reset from "./pages/login/reset.jsx";
 import Profile from "./pages/profile.jsx";
+import Checkout from "./pages/checkout/checkout.jsx"
 
+import Address from "./pages/checkout/address.jsx"
+import Payment from "./pages/checkout/payment.jsx"
 function App() {
   return (
     <AuthProvider>
@@ -26,6 +29,12 @@ function App() {
           <Route path="reset" element={<Reset />} />
           <Route path="forgot" element={<Forgot />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="address" element={<Address />} />
+          <Route path="payment" element={<Payment />} />
+
+
+
           
         </Routes>
       </BrowserRouter>
