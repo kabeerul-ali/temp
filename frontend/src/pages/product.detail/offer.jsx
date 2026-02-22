@@ -147,9 +147,46 @@ export default function OfferDetail() {
     }
   };
 
-  const handleBuyNow = () => {
-    showToast("Buy Now feature coming soon!", "info");
-  };
+ // In OfferDetail.jsx - Replace handleBuyNow function
+const handleBuyNow = () => {
+  if (!offer || !offer._id) {
+    showToast("Offer not available", "error");
+    return;
+  }
+
+  if (timeLeft.isExpired) {
+    showToast("Offer has expired", "error");
+    return;
+  }
+
+  if (!user) {
+    navigate("/login", { state: { from: `/offer/${id}` } });
+    return;
+  }
+
+  // Calculate final price
+  const finalPrice = offer.price - (offer.price * offer.discount / 100);
+  const totalPrice = finalPrice * quantity;
+  const deliveryCharge = totalPrice >= 500 ? 0 : 50;
+  const finalTotal = totalPrice + deliveryCharge;
+
+  // Navigate to address page
+  navigate("/address", {
+    state: {
+      fromBuyNow: true,
+      type: "offer",
+      itemId: offer._id,
+      quantity: quantity,
+      unitPrice: finalPrice,
+      totalPrice: totalPrice,
+      itemName: offer.name,
+      itemImage: offer.image,
+      itemDescription: offer.description,
+      deliveryCharge: deliveryCharge,
+      finalTotal: finalTotal
+    }
+  });
+};
 
   const showToast = (message, type) => {
     const toast = document.createElement("div");

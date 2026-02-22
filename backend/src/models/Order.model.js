@@ -40,6 +40,8 @@ const orderSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
+  
+  // Payment fields
   paymentMethod: {
     type: String,
     enum: ['COD', 'Online', 'Wallet'],
@@ -50,11 +52,18 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Done', 'Failed'],
     default: 'Pending'
   },
+  
+  // Razorpay fields
+  razorpayOrderId: String,
+  razorpayPaymentId: String,
+  razorpaySignature: String,
+  
   orderStatus: {
     type: String,
     enum: ['Processing', 'Shipping', 'Cancelled', 'Delivered'],
     default: 'Processing'
   },
+  
   transactionId: String,
   notes: String,
   cancelledAt: Date,

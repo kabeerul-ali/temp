@@ -112,10 +112,41 @@ export default function ProductDetail() {
     }
   };
 
-  const handleBuyNow = () => {
-    showToast("Buy Now feature coming soon!", "info");
-  };
+// In ProductDetail.jsx - Replace handleBuyNow function
+const handleBuyNow = async () => {
+  if (!product || !product._id) {
+    showToast("Product not available", "error");
+    return;
+  }
 
+  if (!user) {
+    navigate("/login", { state: { from: `/product/${id}` } });
+    return;
+  }
+
+  // Calculate final price
+  const finalPrice = product.discountPrice || product.price;
+  const totalPrice = finalPrice * quantity;
+  const deliveryCharge = totalPrice >= 500 ? 0 : 50;
+  const finalTotal = totalPrice + deliveryCharge;
+
+  // Navigate to address page
+  navigate("/address", {
+    state: {
+      fromBuyNow: true,
+      type: "product",
+      itemId: product._id,
+      quantity: quantity,
+      unitPrice: finalPrice,
+      totalPrice: totalPrice,
+      itemName: product.name,
+      itemImage: product.images?.[0] || "/placeholder.jpg",
+      itemDescription: product.description,
+      deliveryCharge: deliveryCharge,
+      finalTotal: finalTotal
+    }
+  });
+};
   const showToast = (message, type) => {
     const toast = document.createElement("div");
     toast.className = `product-toast ${type}`;

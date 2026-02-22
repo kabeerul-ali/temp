@@ -79,7 +79,10 @@ const userSchema = new mongoose.Schema(
     cart: [cartSchema], // Still same field name
     isVerified: { type: Boolean, default: false },
   },
-  { timestamps: true },
+  { timestamps: true ,
+    versionKey: false
+  },
+  
 );
 
 /* ✅ FIXED HOOK */

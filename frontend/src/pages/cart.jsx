@@ -355,28 +355,41 @@ export default function Cart() {
       { totalItems: 0, subtotal: 0, discount: 0, total: 0, savings: 0 }
     );
   };
-
-  // Proceed to checkout
-  const proceedToCheckout = () => {
-    if (cartItems.length === 0) {
-      showAlertMessage("error", "Your cart is empty");
-      return;
+// In Cart.jsx - Replace proceedToCheckout function
+const proceedToCheckout = () => {
+  if (cartItems.length === 0) {
+    showAlertMessage("error", "Your cart is empty");
+    return;
+  }
+  
+  const unavailableItems = cartItems.filter(item => !item.isAvailable);
+  if (unavailableItems.length > 0) {
+    showAlertMessage("warning", "Some items in your cart are unavailable");
+    return;
+  }
+  
+  if (!user) {
+    navigate("/login", { state: { from: "/cart" } });
+    return;
+  }
+  
+  // Calculate totals
+  const totals = calculateTotals();
+  const deliveryCharge = totals.total >= 500 ? 0 : 50;
+  const cartTotal = totals.total + deliveryCharge;
+  
+  // Navigate to address page
+  navigate("/address", {
+    state: {
+      fromCart: true,
+      cartTotal: cartTotal,
+      cartItemsCount: totals.totalItems,
+      cartSubtotal: totals.total,
+      deliveryCharge: deliveryCharge,
+      discount: totals.discount
     }
-    
-    const unavailableItems = cartItems.filter(item => !item.isAvailable);
-    if (unavailableItems.length > 0) {
-      showAlertMessage("warning", "Some items in your cart are unavailable");
-      return;
-    }
-    
-    if (!user) {
-      navigate("/login", { state: { from: "/cart" } });
-      return;
-    }
-    
-    navigate("/checkout");
-  };
-
+  });
+};
   // Load cart on mount and when user changes
   useEffect(() => {
     let isMounted = true;

@@ -11,7 +11,6 @@ import Forgot from "./pages/login/forgot.jsx";
 import Reset from "./pages/login/reset.jsx";
 import Profile from "./pages/profile.jsx";
 import Checkout from "./pages/checkout/checkout.jsx"
-import Confirm from "./pages/checkout/confirm.jsx"
 
 import Address from "./pages/checkout/address.jsx"
 import Payment from "./pages/checkout/payment.jsx"
@@ -33,7 +32,10 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="address" element={<Address />} />
           <Route path="payment" element={<Payment />} />
-          <Route path="confirm" element={<Confirm />} />
+
+
+
+          
         </Routes>
       </BrowserRouter>
     </AuthProvider>

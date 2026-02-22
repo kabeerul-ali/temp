@@ -12,8 +12,8 @@ import userRoutes from './src/routes/user.routes.js';
 import cartRoutes from './src/routes/cart.routes.js';
 import otpRoutes from './src/routes/otp.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
-
-
+import orderRoutes from './src/routes/order.routes.js'; // NEW
+import paymentRoutes from './src/routes/payment.routes.js'; // NEW
 
 const app = express();
 
@@ -51,6 +51,8 @@ const routes = [
   { name: 'Users', path: '/api/users', route: userRoutes },
   { name: 'OTP', path: '/api/otp', route: otpRoutes },
   { name: 'Auth', path: '/api/auth', route: authRoutes },
+  { name: 'Orders', path: '/api/orders', route: orderRoutes }, // NEW
+  { name: 'Payments', path: '/api/payments', route: paymentRoutes }, // NEW
 ];
 
 routes.forEach(r => app.use(r.path, r.route));
@@ -87,7 +89,7 @@ app.listen(PORT, async () => {
       )}`
     );
   });
-console.log(chalk.green.bold('\n✔ ready to accept api requvest\n'));
+  console.log(chalk.green.bold('\n✔ ready to accept api requvest\n'));
 
   console.log(
     `${chalk.green('➜')} ${chalk.cyan('Health'.padEnd(10))} ${chalk.white(
